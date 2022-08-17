@@ -37,10 +37,10 @@ free(sx_pbr);
 - tell the radio to use an IBM-style CRC-16 for the packet. hopefully this attaches the 16 bit CRC to the end of the radio packet. 
 - if the radio doesn't support some of these packet characteristics, you can usually work around the limitations of the radio, but you'll need to be clever about it.
  - if the radio supports only 16 bit sync words, fixed length packets, and doesn't support the right CRC implementation, you can do the following:
-  - begin your packet with D39107
-  - perform the CRC-16 calculation (IBM style, to communicate with TI CCxxxx ICs) yourself starting from byte 07 all the way until the end of the packet that the PoolButtonSender hands to you.
+	- begin your packet with D39107
+	- perform the CRC-16 calculation (IBM style, to communicate with TI CCxxxx ICs) yourself starting from byte 07 all the way until the end of the packet that the PoolButtonSender hands to you.
  - if the radio supports 16 bit sync words, variable length packets, and has the right CRC implementation
-  - this is a trick question. you still need to configure the radio to send a fixed length packet because when you send the D391 sync word manually, the radio will prefix the packet with whatever the new size is, and the packet will actually begin with `D3 91 09 D3 91 01 FF FF F5`. you'll also need to calculate the CRC-16 manually because the radio would start the calculation from the the 09 which isn't right.
+ 	- this is a trick question. you still need to configure the radio to send a fixed length packet because when you send the D391 sync word manually, the radio will prefix the packet with whatever the new size is, and the packet will actually begin with `D3 91 09 D3 91 01 FF FF F5`. you'll also need to calculate the CRC-16 manually because the radio would start the calculation from the the 09 which isn't right.
 - packet looks something like:
 ```
 Data Layout:
