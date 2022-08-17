@@ -1,0 +1,39 @@
+# this YAML does not include everything you need. it's missing api/wifi info.
+
+esphome:
+  name: pool
+  includes:
+    - srsmith_pool_remote.h
+    - sx1276_srsmith_pool.h
+  libraries:
+    - SPI
+    - "jgromes/RadioLib"
+
+esp32:
+  board: ttgo-t-beam
+  framework:
+    type: arduino
+
+button:
+- platform: template
+  name: "Pool Light"
+  id: pool_light_channel_1
+  on_press:
+    then:
+      - logger.log: "trying to send signal to turn on light"
+      - lambda: |-
+         // button_id, pin
+         SX1276PoolButtonRadio *sx_pbr = new SX1276PoolButtonRadio();
+         PoolButtonSender *my_component = new PoolButtonSender(0xff, sx_pbr);
+         my_component->send_command(0x0d);
+         free(my_component);
+         free(sx_pbr);
+- platform: template
+  id: pool_light_channel_1_change_color
+  name: "Pool Light Change Color"
+  on_press:
+    then:
+      - logger.log: "changing color"
+      - button.press: pool_light_channel_1
+      - delay: 0.01s
+      - button.press: pool_light_channel_1
